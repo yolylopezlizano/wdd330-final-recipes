@@ -1,0 +1,129 @@
+/* Global styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+  color: #333;
+}
+
+/* ===== HEADER ===== */
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background: #76b947;
+  color: white;
+}
+
+/* Center the title even with logo on the left */
+.title-group {
+  text-align: center;
+  flex: 1;
+}
+
+/* Logo styling */
+.logo-img {
+  width: 90px;     /* bigger size */
+  height: 90px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  border: 4px solid white; 
+  border-radius: 50%; 
+  padding: 6px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.logo-link {
+  margin-left: 40px; /* adjust the number */
+}
+
+.logo-img:hover {
+  transform: scale(1.12);
+}
+
+/* ===== HEADINGS ===== */
+h1, h2 {
+  margin: 10px 0;
+}
+
+/* ===== MAIN LAYOUT ===== */
+main {
+  padding: 20px;
+}
+
+/* ===== GRID FOR CATEGORIES & RECIPES ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+/* ===== CATEGORY CARDS ===== */
+.category-card a {
+  display: block;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  text-align: center;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ===== RECIPE CARDS ===== */
+.recipe-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  transition: transform 0.2s ease;
+}
+
+.recipe-card:hover {
+  transform: scale(1.03);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: auto;
+}
+
+.recipe-card h3 {
+  padding: 10px;
+  margin: 0;
+  text-align: center;
+}
+
+/* ===== RECIPE DETAILS PAGE ===== */
+.details-img {
+  width: 100%;
+  max-width: 450px;
+  display: block;
+  margin: 0 auto 20px auto;
+  border-radius: 10px;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-button {
+  display: inline-block;
+  margin-bottom: 15px;
+  text-decoration: none;
+  color: #76b947;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.back-button:hover {
+  transform: translateX(-5px);
+}

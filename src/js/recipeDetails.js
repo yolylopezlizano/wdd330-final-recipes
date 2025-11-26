@@ -9,6 +9,9 @@ function getQueryParam(param) {
   return urlParams.get(param);
 }
 
+const backButton = document.querySelector("#back-link");
+const savedCategory = localStorage.getItem("lastCategory");
+
 async function loadRecipeDetails() {
   const recipeId = getQueryParam("id");
   const container = document.querySelector("#recipe-container");
@@ -34,10 +37,17 @@ async function loadRecipeDetails() {
       <h3>Instructions</h3>
       <p>${meal.strInstructions}</p>
     `;
-
   } catch (error) {
     console.error("Error loading recipe details:", error);
   }
 }
+
+backButton.addEventListener("click", () => {
+  if (savedCategory) {
+    window.location.href = `recipes.html?category=${savedCategory}`;
+  } else {
+    window.location.href = "index.html";
+  }
+});
 
 loadRecipeDetails();

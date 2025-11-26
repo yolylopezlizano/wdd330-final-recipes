@@ -16,6 +16,9 @@ async function loadRecipes() {
 
   title.textContent = category;
 
+  // Save last visited category for the back button
+  localStorage.setItem("lastCategory", category);
+
   try {
     const data = await api.getMealsByCategory(category);
     const meals = data.meals;
@@ -23,12 +26,14 @@ async function loadRecipes() {
     meals.forEach(meal => {
       const div = document.createElement("div");
       div.classList.add("recipe-card");
+
       div.innerHTML = `
         <a href="recipe-details.html?id=${meal.idMeal}">
-            <h3>${meal.strMeal}</h3>
-            <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+          <h3>${meal.strMeal}</h3>
+          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
         </a>
-        `;
+      `;
+
       container.appendChild(div);
     });
 
