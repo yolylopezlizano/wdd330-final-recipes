@@ -2,42 +2,47 @@ import ExternalServices from "./ExternalServices.mjs";
 
 const api = new ExternalServices();
 
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
+// Read category from URL
+function getCategoryFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("category");
 }
 
-async function loadRecipes() {
-  const category = getQueryParam("category");
-  const title = document.querySelector("#category-title");
-  const container = document.querySelector("#recipes-list");
+async function loadRecipesByCategory() {
+  const category = getCategoryFromURL();
+  const title = document.getElementById("category-title");
+  const list = document.getElementById("recipes-list");
 
-  title.textContent = category;
+  if (!category) {
+    title.textContent = "Select a category from the menu";
+    return;
+  }
 
-  // Save last visited category for the back button
-  localStorage.setItem("lastCategory", category);
+  title.textContent = `Category: ${category}`;
 
   try {
-    const data = await api.getMealsByCategory(category);
-    const meals = data.meals;
+    const data = await api.getRecipesByCategory(category);
 
-    meals.forEach(meal => {
-      const div = document.createElement("div");
-      div.classList.add("recipe-card");
+    list.innerHTML = ""; // clear
 
-      div.innerHTML = `
+    data.meals.forEach(meal => {
+      const card = document.createElement("div");
+      card.classList.add("recipe-card");
+
+      card.innerHTML = `
         <a href="recipe-details.html?id=${meal.idMeal}">
-          <h3>${meal.strMeal}</h3>
           <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+          <h3>${meal.strMeal}</h3>
         </a>
       `;
 
-      container.appendChild(div);
+      list.appendChild(card);
     });
 
   } catch (error) {
     console.error("Error loading recipes:", error);
+    list.innerHTML = "<p>Error loading recipes.</p>";
   }
 }
 
-loadRecipes();
+loadRecipesByCategory();

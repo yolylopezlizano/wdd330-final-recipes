@@ -356,3 +356,31 @@ main {
   justify-content: center;
   margin-bottom: 15px;
 }
+.hidden {
+  display: none;
+}
+
+#recipes-list .recipe-card {
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+#categories-list {
+  margin-bottom: 30px;
+}
+
+/* spacing on the page */
+#recipes-title {
+  margin-bottom: 15px;
+}
+
+#category-title {
+  margin: 30px 0 15px 0;
+}
+
+#recipes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
+  justify-items: center;
+}

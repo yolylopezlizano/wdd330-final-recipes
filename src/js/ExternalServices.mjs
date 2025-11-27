@@ -23,4 +23,11 @@ export default class ExternalServices {
     return this.fetchJSON(`/lookup.php?i=${encodeURIComponent(id)}`);
   }
 
+
+  async getRecipesByCategory(category) {
+    const response = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+    );
+    return await response.json();
+  }
 }
