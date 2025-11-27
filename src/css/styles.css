@@ -7,7 +7,7 @@ body {
   color: #333;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .top-header {
   display: flex;
   align-items: center;
@@ -19,14 +19,13 @@ body {
 
 /* Center the title even with logo on the left */
 .title-group {
-  flex: 1;              /* takes all the space between logo and cart */
-  text-align: center;   /* force center */
+  flex: 1;              
+  text-align: center; 
 }
-
 
 /* Logo styling */
 .logo-img {
-  width: 90px;     /* bigger size */
+  width: 90px;    
   height: 90px;
   object-fit: contain;
   transition: transform 0.2s ease;
@@ -45,24 +44,24 @@ body {
   transform: scale(1.12);
 }
 
-/* ===== HEADINGS ===== */
+/* HEADINGS */
 h1, h2 {
   margin: 10px 0;
 }
 
-/* ===== MAIN LAYOUT ===== */
+/* MAIN LAYOUT */
 main {
   padding: 20px;
 }
 
-/* ===== GRID FOR CATEGORIES & RECIPES ===== */
+/*GRID FOR CATEGORIES & RECIPES*/
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
 }
 
-/* ===== CATEGORY CARDS ===== */
+/*CATEGORY CARDS */
 .category-card a {
   display: block;
   padding: 15px;
@@ -80,7 +79,7 @@ main {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* ===== RECIPE CARDS ===== */
+/* RECIPE CARDS */
 .recipe-card {
   background: white;
   border-radius: 8px;
@@ -104,7 +103,7 @@ main {
   text-align: center;
 }
 
-/* ===== RECIPE DETAILS PAGE ===== */
+/* RECIPE DETAILS PAGE */
 .details-img {
   width: 100%;
   max-width: 450px;
@@ -113,7 +112,7 @@ main {
   border-radius: 10px;
 }
 
-/* ===== BACK BUTTON ===== */
+/* BACK BUTTON*/
 .back-button {
   display: inline-block;
   margin-bottom: 15px;
@@ -179,9 +178,8 @@ main {
   background: #f2f2f2;
 }
 /* Limit image size in search results */
-/* Force search results to follow the grid card style */
 #search-results .recipe-card {
-  max-width: 250px;   /* prevent full-width stretching */
+  max-width: 250px;   
   margin: 0 auto;
 }
 
@@ -326,8 +324,8 @@ main {
 }
 
 .dish-box img {
-  width: 80%;         /* <-- Imagen más pequeña */
-  max-width: 220px;   /* <-- Tamaño visual más manejable */
+  width: 80%;         
+  max-width: 220px;   
   border-radius: 10px;
   margin-bottom: 10px;
 }

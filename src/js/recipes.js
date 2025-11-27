@@ -1,5 +1,3 @@
-// src/js/recipes.js
-
 import ExternalServices from "./ExternalServices.mjs";
 
 const api = new ExternalServices();

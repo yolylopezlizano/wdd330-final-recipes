@@ -1,5 +1,3 @@
-// src/js/ExternalServices.mjs
-
 const baseUrl = "https://www.themealdb.com/api/json/v1/1";
 
 export default class ExternalServices {

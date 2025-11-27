@@ -1,10 +1,6 @@
-// src/js/main.js
-
 import ExternalServices from "./ExternalServices.mjs";
 
-/* ============================
-   DISH OF THE DAY
-============================ */
+// DISH OF THE DAY
 async function loadDishOfDay() {
   const container = document.getElementById("dish-content");
   if (!container) return;
@@ -24,12 +20,10 @@ loadDishOfDay();
 
 const api = new ExternalServices();
 
-/* ============================
-   LOAD CATEGORIES (only if exists)
-============================ */
+//LOAD CATEGORIES (only if exists)
 async function loadCategories() {
   const container = document.querySelector("#categories-list");
-  if (!container) return;  // <-- prevents errors
+  if (!container) return;  
 
   try {
     const data = await api.getCategories();
@@ -49,15 +43,13 @@ async function loadCategories() {
 
 loadCategories();
 
-/* ============================
-   SEARCH (only if elements exist)
-============================ */
+// SEARCH (only if elements exist)
 const searchBtn = document.getElementById("searchButton");
 const searchInput = document.getElementById("searchInput");
 const resultsContainer = document.getElementById("search-results");
 const suggestionsBox = document.getElementById("suggestions");
 
-/* CLICK SEARCH */
+// CLICK SEARCH
 if (searchBtn && searchInput && resultsContainer) {
   searchBtn.addEventListener("click", async () => {
     const query = searchInput.value.trim();
@@ -93,7 +85,7 @@ if (searchBtn && searchInput && resultsContainer) {
   });
 }
 
-/* ENTER KEY SEARCH */
+// ENTER KEY SEARCH
 if (searchInput && searchBtn) {
   searchInput.addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
@@ -102,7 +94,7 @@ if (searchInput && searchBtn) {
   });
 }
 
-/* CLEAR RESULTS ON DELETE */
+// CLEAR RESULTS ON DELETE
 let previousQuery = "";
 
 if (searchInput && resultsContainer) {
@@ -117,7 +109,7 @@ if (searchInput && resultsContainer) {
   });
 }
 
-/* AUTO-SUGGESTIONS */
+// AUTO-SUGGESTIONS
 if (searchInput && suggestionsBox) {
   searchInput.addEventListener("input", async () => {
     const query = searchInput.value.trim();
@@ -155,9 +147,6 @@ if (searchInput && suggestionsBox) {
   });
 }
 
-/* ============================
-   UPDATE CART COUNT
-============================ */
 export function updateCartCount() {
   const cartCount = document.getElementById("cart-count");
   if (!cartCount) return;
@@ -165,3 +154,4 @@ export function updateCartCount() {
   const shoppingList = JSON.parse(localStorage.getItem("shoppingList")) || [];
   cartCount.textContent = shoppingList.length;
 }
+updateCartCount();

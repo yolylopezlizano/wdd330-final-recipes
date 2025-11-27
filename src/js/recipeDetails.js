@@ -1,11 +1,8 @@
-// src/js/recipeDetails.js
-
 import ExternalServices from "./ExternalServices.mjs";
 import { updateCartCount } from "./main.js";
 
 const api = new ExternalServices();
 
-// Read query param (?id=123)
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);
@@ -23,9 +20,7 @@ async function loadRecipeDetails() {
     const data = await api.getMealById(recipeId);
     const meal = data.meals[0];
 
-    /* --------------------------
-       1. GET INGREDIENTS LIST
-    --------------------------- */
+    // GET INGREDIENTS LIST
     const ingredients = [];
     let ingredientsList = "";
 
@@ -39,15 +34,11 @@ async function loadRecipeDetails() {
       }
     }
 
-    /* --------------------------
-       2. COST ESTIMATE
-    --------------------------- */
+    //COST ESTIMATE
     const costPerIngredient = 1.25;
     const estimatedCost = (ingredients.length * costPerIngredient).toFixed(2);
 
-    /* --------------------------
-       3. BUILD HTML CONTENT
-    --------------------------- */
+    // BUILD HTML CONTENT
     container.innerHTML = `
       <h2>${meal.strMeal}</h2>
 
@@ -70,9 +61,7 @@ async function loadRecipeDetails() {
       <p>${meal.strInstructions}</p>
     `;
 
-    /* --------------------------
-       4. ADD TO SHOPPING LIST
-    --------------------------- */
+    // ADD TO SHOPPING LIST
     document
       .getElementById("add-to-list")
       .addEventListener("click", () => {
@@ -103,9 +92,7 @@ async function loadRecipeDetails() {
   }
 }
 
-/* --------------------------
-   BACK BUTTON BEHAVIOR
---------------------------- */
+//BACK BUTTON BEHAVIOR
 backButton.addEventListener("click", () => {
   if (savedCategory) {
     window.location.href = `recipes.html?category=${savedCategory}`;
