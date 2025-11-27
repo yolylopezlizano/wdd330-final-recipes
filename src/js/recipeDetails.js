@@ -94,11 +94,8 @@ async function loadRecipeDetails() {
 
 //BACK BUTTON BEHAVIOR
 backButton.addEventListener("click", () => {
-  if (savedCategory) {
-    window.location.href = `recipes.html?category=${savedCategory}`;
-  } else {
-    window.location.href = "index.html";
-  }
+  window.location.href = "recipes.html";
 });
+
 
 loadRecipeDetails();
