@@ -19,18 +19,68 @@
       <h1>Healthy Recipes</h1>
       <p>Final Project - WDD330</p>
     </div>
+
+    <a href="shopping-list.html" class="cart-icon">
+    <img src="./src/images/ImageCart.png" class="cart-img">
+    <span id="cart-count">0</span>
+    </a>
+
   </header>
 
 
-  <main>
+<main class="homepage-layout">
 
-    <!-- Categories section -->
-    <section id="categories">
-      <h2>Categories</h2>
-      <div id="categories-list" class="grid"></div>
+  <!-- ========== LEFT MENU ========== -->
+  <aside class="side-menu">
+    <h2 class="menu-title">Menu</h2>
+
+    <ul class="menu-list">
+      <li><a href="weekly-plan.html">Weekly Plan</a></li>
+      <li><a href="recipes.html">Recipes</a></li>
+      <li><a href="favorites.html">Favorites</a></li>
+      <li><a href="shopping-list.html">Shopping List</a></li>
+    </ul>
+  </aside>
+
+  <!-- ========== RIGHT CONTENT ========== -->
+  <section class="home-content">
+
+    <!-- Welcome box -->
+    <div class="welcome-box">
+      <h2 class="welcome-title">Welcome to your Healthy Recipes App!</h2>
+      <p class="welcome-text">
+        Plan your meals, explore recipes, and organize your shopping list, all in one place.
+      </p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- DISH OF THE DAY -->
+    <section id="dish-of-day" class="dish-section">
+      <h3 class="dish-title">Dish of the day:</h3>
+
+      <div id="dish-content" class="dish-box">
+        <!-- JS inserts content here -->
+      </div>
     </section>
 
-  </main>
+    <!-- SEARCH BELOW -->
+    <section class="search-wrapper">
+      <h3>Search Recipes</h3>
+
+      <div class="search-section">
+        <input type="text" id="searchInput" placeholder="Search recipes...">
+        <button id="searchButton">Search</button>
+      </div>
+
+      <div id="suggestions" class="suggestions-box"></div>
+      <div id="search-results" class="grid"></div>
+
+    </section>
+
+  </section>
+
+</main>
 
   <script type="module" src="./src/js/main.js"></script>
 

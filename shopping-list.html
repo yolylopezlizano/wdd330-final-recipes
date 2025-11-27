@@ -2,36 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Recipes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Shopping List</title>
   <link rel="stylesheet" href="./src/css/styles.css">
 </head>
-
 <body>
 
-  <header class="top-header">
+<header class="top-header">
+
+    <!-- LOGO -->
     <a href="index.html" class="logo-link">
       <img src="./src/images/ImageLogo.png" class="logo-img">
     </a>
 
+    <!-- TITLE -->
     <div class="title-group">
-      <h1>Recipes</h1>
-      <p>Select a category to explore</p>
+      <h1>Healthy Recipes</h1>
+      <p>Final Project - WDD330</p>
     </div>
 
+    <!-- CART -->
     <a href="shopping-list.html" class="cart-icon">
       <img src="./src/images/ImageCart.png" class="cart-img">
       <span id="cart-count">0</span>
     </a>
-  </header>
 
-  <main>
-    <h2>Categories</h2>
-    <div id="categories-list" class="grid"></div>
-  </main>
+</header>
 
-  <script type="module" src="./src/js/main.js"></script>
+<main>
+  <ul id="shopping-items"></ul>
+  <button id="clear-list" class="add-button">Clear List</button>
+</main>
+
+<script type="module" src="./src/js/shoppingList.js"></script>
 
 </body>
 </html>

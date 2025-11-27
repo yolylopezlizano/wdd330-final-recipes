@@ -11,8 +11,7 @@ body {
 .top-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
+  justify-content: space-between;
   padding: 20px;
   background: #76b947;
   color: white;
@@ -20,9 +19,10 @@ body {
 
 /* Center the title even with logo on the left */
 .title-group {
-  text-align: center;
-  flex: 1;
+  flex: 1;              /* takes all the space between logo and cart */
+  text-align: center;   /* force center */
 }
+
 
 /* Logo styling */
 .logo-img {
@@ -37,7 +37,8 @@ body {
   background-color: rgba(255, 255, 255, 0.3);
 }
 .logo-link {
-  margin-left: 40px; /* adjust the number */
+  display: flex;
+  align-items: center;
 }
 
 .logo-img:hover {
@@ -126,4 +127,234 @@ main {
 
 .back-button:hover {
   transform: translateX(-5px);
+}
+.search-section {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-section input {
+  padding: 10px;
+  width: 200px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.search-section button {
+  padding: 10px 15px;
+  background: #76b947;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.search-section button:hover {
+  background: #5da13c;
+}
+
+.suggestions-box {
+  background: white;
+  border: 1px solid #ddd;
+  max-width: 280px;
+  margin: 5px auto 10px auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.suggestion-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: #f2f2f2;
+}
+/* Limit image size in search results */
+/* Force search results to follow the grid card style */
+#search-results .recipe-card {
+  max-width: 250px;   /* prevent full-width stretching */
+  margin: 0 auto;
+}
+
+.estimated-cost {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #4a8f2c;
+  background: #e8f6e3;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #cde4c4;
+  width: fit-content;
+}
+.cart-icon {
+  position: relative;
+  margin-right: 20px;
+}
+
+.cart-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cart-img:hover {
+  transform: scale(1.1);
+}
+
+#cart-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+.center-btn {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* LAYOUT */
+.homepage-layout {
+  display: flex;
+  gap: 25px;
+  padding: 25px;
+}
+
+/* LEFT MENU */
+.side-menu {
+  width: 28%;
+  background: #76b947;
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+  border: 3px solid #dbe8d2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.menu-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.menu-list {
+  list-style: none;
+  padding-left: 15px;
+}
+
+.menu-list li {
+  margin: 15px 0;
+  font-size: 20px;
+}
+
+.menu-list a {
+  color: white;
+  text-decoration: none;
+}
+
+.menu-list a:hover {
+  text-decoration: underline;
+}
+
+/* RIGHT CONTENT */
+.home-content {
+  flex: 1;
+}
+
+/* WELCOME BOX */
+.welcome-box {
+  background: #eaf7e2;
+  padding: 20px 25px;
+  border-radius: 12px;
+  border: 2px solid #d8eccc;
+  text-align: center;
+}
+
+.welcome-title {
+  margin-bottom: 10px;
+  font-size: 26px;
+  color: #2f5e1e;
+}
+
+.welcome-text {
+  font-size: 18px;
+  color: #3a6a29;
+}
+
+/* SEPARATOR LINE */
+.divider {
+  margin: 25px 0;
+  border: none;
+  border-top: 2px solid #ccc;
+}
+
+/* DISH OF THE DAY */
+.dish-section {
+  text-align: center;
+}
+
+.dish-title {
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.dish-box {
+  background: white;
+  border: 2px solid #76b947;
+  border-radius: 12px;
+  padding: 15px;
+  display: inline-block;
+  width: 70%;
+  max-width: 450px;
+}
+
+.dish-box img {
+  width: 80%;         /* <-- Imagen más pequeña */
+  max-width: 220px;   /* <-- Tamaño visual más manejable */
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.featured-btn {
+  display: inline-block;
+  background: #f8f3d7;
+  color: #2f5e1e;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 2px solid #c6b85e;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.featured-btn:hover {
+  background: #f1e8c4;
+}
+
+/* SEARCH SECTION */
+.search-wrapper {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.search-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
 }
