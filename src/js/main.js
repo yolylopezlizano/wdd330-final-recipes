@@ -1,14 +1,36 @@
 import ExternalServices from "./ExternalServices.mjs";
 
-// DISH OF THE DAY
+// DISH OF THE DAY - ONLY ONCE PER DAY
 async function loadDishOfDay() {
   const container = document.getElementById("dish-content");
   if (!container) return;
 
+  const storedData = JSON.parse(localStorage.getItem("dishOfDay"));
+  const today = new Date().toDateString();
+
+  // If dish exists and is from today → use it
+  if (storedData && storedData.date === today) {
+    displayDish(storedData.meal);
+    return;
+  }
+
+  // Otherwise fetch a new meal
   const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
   const data = await response.json();
   const meal = data.meals[0];
 
+  // Save it for the rest of the day
+  localStorage.setItem("dishOfDay", JSON.stringify({
+    date: today,
+    meal: meal
+  }));
+
+  displayDish(meal);
+}
+
+// Helper to insert into HTML
+function displayDish(meal) {
+  const container = document.getElementById("dish-content");
   container.innerHTML = `
     <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
     <h4>${meal.strMeal}</h4>
