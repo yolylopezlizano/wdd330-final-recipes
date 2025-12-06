@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Favorites</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./src/css/styles.css">
+</head>
+
+<body>
+
+  <header class="top-header">
+    <a href="index.html" class="logo-link">
+      <img src="./src/images/ImageLogo.png" class="logo-img" alt="logo">
+    </a>
+
+    <div class="title-group">
+      <h1>Favorite Recipes ❤️</h1>
+      <p>Saved Recipes</p>
+    </div>
+
+    <a href="shopping-list.html" class="cart-icon">
+      <img src="./src/images/ImageCart.png" class="cart-img">
+      <span id="cart-count">0</span>
+    </a>
+  </header>
+
+  <main class="favorites-main">
+
+    <a href="index.html" class="back-button">⬅ Back</a>
+
+    <h2 style="text-align:center; margin-top:20px;">Your Favorites</h2>
+
+    <ul id="fav-list" class="fav-list"></ul>
+
+    <button id="clear-fav" class="clear-btn">Clear All Favorites</button>
+  </main>
+  
+  <footer class="footer">
+    <p>Yolanda Lizano|Healthy Recipes © 2025 | Final Project WDD330</p>
+    <p class="footer-small">Made with 💚 for learning purposes</p>
+  </footer>
+
+  <script type="module" src="./src/js/favorites.js"></script>
+
+</body>
+</html>

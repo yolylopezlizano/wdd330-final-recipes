@@ -1,0 +1,28 @@
+export const estimatedPrices = {
+  sugar: 0.50,
+  salt: 0.20,
+  water: 0.0,
+  flour: 1.00,
+  egg: 0.30,
+  milk: 0.90,
+  butter: 1.20,
+  oil: 1.40,
+  cheese: 1.80,
+  chicken: 3.50,
+  beef: 4.20,
+  rice: 0.90,
+  pasta: 1.10,
+  tomato: 0.60,
+  onion: 0.40,
+  garlic: 0.30,
+  lemon: 0.40,
+  vanilla: 1.50,
+  almonds: 2.00,
+  nuts: 2.20,
+  honey: 1.30,
+  cornstarch: 0.70,
+  fruit: 1.00,
+  vegetable: 0.80,
+
+  default: 1.25 // si no existe usamos esto
+};
