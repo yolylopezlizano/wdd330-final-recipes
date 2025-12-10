@@ -12,17 +12,15 @@ const totalDisplay = document.getElementById("total-price");
 const checkoutBtn = document.getElementById("checkout-btn");
 const clearBtn = document.getElementById("clear-list");
 
-// Convert old items {string} to objects
 if (!shoppingList[0]?.price) {
   shoppingList = shoppingList.map(item => ({
     name: typeof item === "string" ? item : item.name,
-    qty: 1,
-    price: getPrice(),
+    qty: item.qty || 1,
+    price: typeof item.price === "number" ? item.price : getPrice(),
   }));
   localStorage.setItem("shoppingList", JSON.stringify(shoppingList));
 }
 
-// Render shopping list
 function displayItems() {
   listContainer.innerHTML = "";
   
@@ -30,10 +28,17 @@ function displayItems() {
     const li = document.createElement("li");
     
     li.innerHTML = `
-      <span>${item.name}</span>
-      <input type="number" min="1" value="${item.qty}" class="qty-input" data-index="${index}">
-      <span>$${(item.price * item.qty).toFixed(2)}</span>
-      <button class="remove-btn" data-index="${index}">X</button>
+      <span class="item-name">${item.name}</span>
+
+      <div class="qty-controls">
+        <button class="qty-btn minus" data-name="${item.name}">-</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn plus" data-name="${item.name}">+</button>
+      </div>
+
+      <span class="item-price">$${(item.qty * item.price).toFixed(2)}</span>
+
+      <button class="delete-item" data-name="${item.name}">🗑</button>
     `;
     
     listContainer.appendChild(li);
@@ -43,7 +48,6 @@ function displayItems() {
   updateCartCount();
 }
 
-// Update qty
 listContainer.addEventListener("input", (e) => {
   if (e.target.classList.contains("qty-input")) {
     const index = e.target.dataset.index;
@@ -52,7 +56,6 @@ listContainer.addEventListener("input", (e) => {
   }
 });
 
-// Remove single item
 listContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("remove-btn")) {
     const index = e.target.dataset.index;
@@ -61,28 +64,55 @@ listContainer.addEventListener("click", (e) => {
   }
 });
 
-// Clear full list
 clearBtn.addEventListener("click", () => {
   shoppingList = [];
   saveAndRefresh();
 });
 
-// Calculate total
 function updateTotal() {
   const total = shoppingList.reduce((sum, item) => sum + item.price * item.qty, 0);
   totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
 }
 
-// Save & reload UI
 function saveAndRefresh() {
   localStorage.setItem("shoppingList", JSON.stringify(shoppingList));
   displayItems();
 }
 
-// Checkout placeholder
 checkoutBtn.addEventListener("click", () => {
-  alert("Payment/Checkout will be added later!");
+  window.location.href = "checkout.html";
 });
 
-// INIT
 displayItems();
+
+listContainer.addEventListener("click", (e) => {
+
+  if (e.target.classList.contains("qty-btn")) {
+    const name = e.target.dataset.name;
+    const isPlus = e.target.classList.contains("plus");
+
+    shoppingList = shoppingList.map(item => {
+      if (item.name === name) {
+        item.qty = isPlus ? item.qty + 1 : Math.max(1, item.qty - 1);
+      }
+      return item;
+    });
+
+    saveAndRefresh();
+  }
+
+  if (e.target.classList.contains("delete-item")) {
+    const name = e.target.dataset.name;
+
+    shoppingList = shoppingList.map(item => {
+        if(item.name === name){
+            item.qty -= 1; 
+        }
+        return item;
+    }).filter(item => item.qty > 0); 
+
+    saveAndRefresh();
+  }
+
+});
+

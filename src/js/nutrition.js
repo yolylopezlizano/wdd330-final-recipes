@@ -1,6 +1,4 @@
-// src/js/nutrition.js
-
-const API_KEY = "oE1FY3Zlhl+T5adRLjQR5g==UQYW75uyleUcO174";   // pega tu key sin espacios ni saltos
+const API_KEY = "oE1FY3Zlhl+T5adRLjQR5g==UQYW75uyleUcO174";   
 
 export async function getNutrition(ingredient) {
   try {
@@ -21,7 +19,7 @@ export async function getNutrition(ingredient) {
       return { calories:"N/A", protein_g:"N/A", fat_total_g:"N/A", carbohydrates_total_g:"N/A" };
     }
 
-    return data[0]; // returns result for the first ingredient
+    return data[0]; 
 
   } catch (error) {
     console.error("Nutrition API error:", error);

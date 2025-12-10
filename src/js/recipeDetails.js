@@ -1,136 +1,172 @@
 import ExternalServices from "./ExternalServices.mjs";
 import { updateCartCount } from "./main.js";
-import { getNutrition } from "./nutrition.js"; // second API
+import { getNutrition } from "./nutrition.js";  
 
 const api = new ExternalServices();
 
-// Get parameter from URL
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
+function getQueryParam(param){
+  return new URLSearchParams(window.location.search).get(param);
 }
 
 const backButton = document.querySelector("#back-link");
+let recipeData = null;
 
-// Load recipe info from API
-async function loadRecipeDetails() {
-
+async function loadRecipeDetails(){
   const recipeId = getQueryParam("id");
   const container = document.querySelector("#recipe-container");
 
-  try {
+  try{
     const data = await api.getMealById(recipeId);
     const meal = data.meals[0];
+    recipeData = meal;
 
-    // Collect ingredients
-    const ingredients = [];
-    let ingredientsList = "";
+    let ingredients=[];
+    let ingredientsList="";
 
-    for (let i = 1; i <= 20; i++) {
-      const ingredient = meal[`strIngredient${i}`];
-      const measure = meal[`strMeasure${i}`];
+    for(let i=1;i<=20;i++){
+      let ing = meal[`strIngredient${i}`];
+      let mes = meal[`strMeasure${i}`];
 
-      if (ingredient && ingredient.trim() !== "") {
-        ingredients.push(ingredient);
-        ingredientsList += `<li>${ingredient} - ${measure}</li>`;
+      if(ing && ing.trim()!==""){
+        ingredients.push(ing);
+        ingredientsList += `<li>${ing} - ${mes}</li>`;
       }
     }
 
-    // Simple cost estimate
-    const costPerIngredient = 1.25;
-    const estimatedCost = (ingredients.length * costPerIngredient).toFixed(2);
+    let nutrition = await getNutrition(ingredients[0]); 
 
-    // Nutrition fallback values if API blocks 
-    let nutrition = await getNutrition(`${ingredients[0]} 100g`).catch(() => null);
+    let fat      = nutrition?.fat_total_g || (Math.random()*5+1).toFixed(1);
+    let carbs    = nutrition?.carbohydrates_total_g || (Math.random()*15+5).toFixed(1);
+    let sugar    = nutrition?.sugar_g || (Math.random()*20+5).toFixed(1);
+    let fiber    = nutrition?.fiber_g || (Math.random()*3+1).toFixed(1);
 
-    let carbs = nutrition?.carbohydrates_total_g || (Math.random() * 15 + 5).toFixed(1);
-    let fat = nutrition?.fat_total_g || (Math.random() * 5 + 1).toFixed(1);
-    let sugar = nutrition?.sugar_g || (Math.random() * 20 + 5).toFixed(1);
-    let fiber = nutrition?.fiber_g || (Math.random() * 3 + 1).toFixed(1);
+    const estimatedCost=(ingredients.length * 1.25).toFixed(2);
 
-    // Fake allowed values
-    let calories = (Math.random() * 300 + 150).toFixed(0);
-    let protein = (Math.random() * 10 + 3).toFixed(1);
+container.innerHTML = `
+<div class="recipe-wrapper">
 
-    // Build HTML inside page
-    container.innerHTML = `
+  <div class="details-header">
       <h2>${meal.strMeal}</h2>
+  </div>
+
+  <div class="details-top">
       <img src="${meal.strMealThumb}" class="details-img">
 
-      <p class="estimated-cost">Estimated Cost: $${estimatedCost}</p>
+      <div class="side-panel">
+          <div class="estimated-cost">Estimated Cost: $${estimatedCost}</div>
 
-      <button id="add-to-list" class="add-button">Add Ingredients to Shopping List</button>
-
-      <!-- ⭐ Add to Favorites button -->
-      <button id="add-to-favorites" class="fav-button">❤️ Add to Favorites</button>
-
-      <h3>Ingredients</h3>
-      <ul>${ingredientsList}</ul>
-
-      <h3>Instructions</h3>
-      <p>${meal.strInstructions}</p>
-
-      <div class="nutrition-box">
-        <h3>Nutrition (Aprox. 100g)</h3>
-        <p><strong>Calories:</strong> ${calories} kcal</p>
-        <p><strong>Protein:</strong> ${protein} g</p>
-        <p><strong>Fat:</strong> ${fat} g</p>
-        <p><strong>Carbs:</strong> ${carbs} g</p>
-        <p><strong>Sugar:</strong> ${sugar} g</p>
-        <p><strong>Fiber:</strong> ${fiber} g</p>
+          <div class="detail-buttons">
+              <button id="add-to-list">🛒 Add Ingredients to Shopping List</button>
+              <button id="add-week">📅 Add to Weekly Plan</button>
+              <button id="add-to-favorites">❤️ Add to Favorites</button>
+          </div>
       </div>
-    `;
+  </div>
 
-    // Add to Shopping List 
-    document.getElementById("add-to-list").addEventListener("click", () => {
+  <div class="details-content">
 
-      let shoppingList = JSON.parse(localStorage.getItem("shoppingList")) || [];
+      <div class="left-column">
+          <div class="ingredients">
+              <h3>Ingredients</h3>
+              <ul>${ingredientsList}</ul>
+          </div>
 
-      // Add avoiding duplicates
-      ingredients.forEach(item => {
-        if (!shoppingList.includes(item)) shoppingList.push(item);
-      });
+          <div class="nutrition-box">
+              <h3>Nutrition (per 100g approx)</h3>
+              <p><b>Fat:</b> ${fat} g</p>
+              <p><b>Carbs:</b> ${carbs} g</p>
+              <p><b>Sugar:</b> ${sugar} g</p>
+              <p><b>Fiber:</b> ${fiber} g</p>
+          </div>
+      </div>
 
-      localStorage.setItem("shoppingList", JSON.stringify(shoppingList));
-      updateCartCount();
-      alert("Added to shopping list! 🛒");
-    });
+      <div class="instructions">
+          <h3>Instructions</h3>
+          <p>${meal.strInstructions}</p>
+      </div>
+  </div>
+</div>
+`;
 
-    // Add to Favorites
-    document.getElementById("add-to-favorites").addEventListener("click", () => {
+    document.getElementById("add-to-list").onclick = ()=>{
+        let list = JSON.parse(localStorage.getItem("shoppingList")) || [];
 
-      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        ingredients.forEach(i=>{
+            const item = list.find(x => x.name === i);
 
-      // Save object (name + id)
-      if (!favorites.some(f => f.id === meal.idMeal)) {
-        favorites.push({
-          name: meal.strMeal,
-          id: meal.idMeal
+            if(item){
+                item.qty += 1; 
+            } else {
+                list.push({
+                    name: i,
+                    qty: 1,
+                    price:(Math.random()*2+0.5).toFixed(2)
+                });
+            }
         });
 
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-        alert("Added to favorites ❤️");
+        localStorage.setItem("shoppingList", JSON.stringify(list));
+        updateCartCount();
+        alert("Ingredients added again! ✔");
+    };
 
-      } else {
-        alert("Already in favorites");
-      }
-    });
+    document.getElementById("add-to-favorites").onclick = ()=>{
+      let fav = JSON.parse(localStorage.getItem("favorites")) || [];
+
+      if(!fav.some(f=>f.id===meal.idMeal)){
+        fav.push({ id:meal.idMeal, name:meal.strMeal, img:meal.strMealThumb });
+        localStorage.setItem("favorites", JSON.stringify(fav));
+        alert("Added to Favorites ❤️");
+      } else alert("Already in favorites");
+    };
+
+    document.getElementById("add-week").onclick = ()=>{
+      document.getElementById("week-modal").classList.remove("hidden");
+    };
 
     updateCartCount();
 
-  } catch (err) {
-    console.error("Error loading recipe:", err);
-  }
+  }catch(e){ console.log("Error",e); }
 }
 
-// Back button returns to recipes
-if (backButton) {
-  backButton.addEventListener("click", () => {
-    window.location.href = "recipes.html";
-  });
+const WEEKLY_KEY="weeklyPlan";
+const MAX_MEALS = 3;
+
+function loadWeekly(){
+  return JSON.parse(localStorage.getItem(WEEKLY_KEY)) || {
+    monday:[],tuesday:[],wednesday:[],thursday:[],
+    friday:[],saturday:[],sunday:[]
+  };
 }
 
-loadRecipeDetails(); // start
+function saveWeekly(w){
+  localStorage.setItem(WEEKLY_KEY, JSON.stringify(w));
+}
 
+document.getElementById("close-week").onclick = ()=>{
+  document.getElementById("week-modal").classList.add("hidden");
+};
 
+document.getElementById("save-week").onclick = ()=>{
+  const day = document.getElementById("week-day").value.toLowerCase();
+  let weekly = loadWeekly();
 
+  const meal = {
+    id: recipeData.idMeal,
+    name: recipeData.strMeal,
+    img: recipeData.strMealThumb
+  };
+
+  if(weekly[day].length >= MAX_MEALS) return alert("Limit 3 meals per day");
+  if(weekly[day].some(m=>m.id===meal.id)) return alert("Already added");
+
+  weekly[day].push(meal);
+  saveWeekly(weekly);
+
+  alert(`Added to ${day}!`);
+  document.getElementById("week-modal").classList.add("hidden");
+};
+
+if(backButton) backButton.onclick = ()=>history.back();
+
+loadRecipeDetails();

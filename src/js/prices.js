@@ -24,5 +24,5 @@ export const estimatedPrices = {
   fruit: 1.00,
   vegetable: 0.80,
 
-  default: 1.25 // si no existe usamos esto
+  default: 1.25 
 };

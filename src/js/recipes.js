@@ -1,48 +1,103 @@
 import ExternalServices from "./ExternalServices.mjs";
+import { updateCartCount } from "./main.js";
 
 const api = new ExternalServices();
 
-// Read category from URL
-function getCategoryFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("category");
+const params = new URLSearchParams(window.location.search);
+let currentCategory = params.get("category");
+
+const categoriesList = document.getElementById("categories-list");
+const recipesList = document.getElementById("recipes-list");
+const recipesTitle = document.getElementById("recipes-title");
+const categoryTitle = document.getElementById("category-title");
+
+async function loadCategories() {
+    categoriesList.innerHTML = "";  
+
+    try {
+        const data = await api.getCategories();
+
+        data.categories.forEach(cat => {
+            const div = document.createElement("div");
+            div.classList.add("category-card");
+
+            div.innerHTML = `
+                <button class="category-btn" data-cat="${cat.strCategory}">
+                    ${cat.strCategory}
+                </button>`;
+            categoriesList.appendChild(div);
+        });
+
+    } catch (err) {
+        console.error("Error loading categories:", err);
+    }
 }
 
-async function loadRecipesByCategory() {
-  const category = getCategoryFromURL();
-  const title = document.getElementById("category-title");
-  const list = document.getElementById("recipes-list");
+async function loadRecipes(category) {
 
-  if (!category) {
-    title.textContent = "Select a category from the menu";
-    return;
-  }
+    categoriesList.style.display = "none";
+    recipesTitle.style.display = "none";
 
-  title.textContent = `Category: ${category}`;
+    categoryTitle.textContent = `${category} Recipes`;
+    categoryTitle.classList.remove("hidden");
 
-  try {
-    const data = await api.getRecipesByCategory(category);
+    recipesList.innerHTML = "";
 
-    list.innerHTML = ""; // clear
+    const data = await api.getMealsByCategory(category); // <-- el método correcto
 
     data.meals.forEach(meal => {
-      const card = document.createElement("div");
-      card.classList.add("recipe-card");
+        const div = document.createElement("div");
+        div.classList.add("recipe-card");
 
-      card.innerHTML = `
-        <a href="recipe-details.html?id=${meal.idMeal}">
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-          <h3>${meal.strMeal}</h3>
-        </a>
-      `;
+        div.innerHTML = `
+            <a href="recipe-details.html?id=${meal.idMeal}">
+                <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+                <h4>${meal.strMeal}</h4>
+            </a>
+        `;
 
-      list.appendChild(card);
+        recipesList.appendChild(div);
     });
 
-  } catch (error) {
-    console.error("Error loading recipes:", error);
-    list.innerHTML = "<p>Error loading recipes.</p>";
-  }
+    currentCategory = category;
 }
 
-loadRecipesByCategory();
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("category-btn")) {
+        const category = e.target.dataset.cat;
+        loadRecipes(category);
+    }
+});
+
+const backBtn = document.querySelector(".back-button");
+
+if (backBtn) {
+    backBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        if (currentCategory) {
+            categoryTitle.classList.add("hidden");
+            recipesList.innerHTML = "";
+            categoriesList.style.display = "grid";
+            recipesTitle.style.display = "block";
+            currentCategory = null;
+        } else {
+            window.location.href = "index.html"; 
+        }
+    });
+}
+
+if (currentCategory) {
+    loadRecipes(currentCategory);
+} else {
+    loadCategories();
+}
+
+function bounceCart(){
+  const cart = document.getElementById("cart-count");
+  if(!cart) return;
+  cart.classList.add("cart-bounce");
+  setTimeout(()=> cart.classList.remove("cart-bounce"), 300);
+}
+updateCartCount();
+bounceCart();

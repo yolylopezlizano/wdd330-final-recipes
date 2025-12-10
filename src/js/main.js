@@ -1,6 +1,5 @@
 import ExternalServices from "./ExternalServices.mjs";
 
-// DISH OF THE DAY - ONLY ONCE PER DAY
 async function loadDishOfDay() {
   const container = document.getElementById("dish-content");
   if (!container) return;
@@ -8,27 +7,19 @@ async function loadDishOfDay() {
   const storedData = JSON.parse(localStorage.getItem("dishOfDay"));
   const today = new Date().toDateString();
 
-  // If dish exists and is from today → use it
   if (storedData && storedData.date === today) {
     displayDish(storedData.meal);
     return;
   }
 
-  // Otherwise fetch a new meal
   const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
   const data = await response.json();
   const meal = data.meals[0];
 
-  // Save it for the rest of the day
-  localStorage.setItem("dishOfDay", JSON.stringify({
-    date: today,
-    meal: meal
-  }));
-
+  localStorage.setItem("dishOfDay", JSON.stringify({ date: today, meal }));
   displayDish(meal);
 }
 
-// Helper to insert into HTML
 function displayDish(meal) {
   const container = document.getElementById("dish-content");
   container.innerHTML = `
@@ -42,118 +33,87 @@ loadDishOfDay();
 
 const api = new ExternalServices();
 
-//LOAD CATEGORIES (only if exists)
 async function loadCategories() {
   const container = document.querySelector("#categories-list");
-  if (!container) return;  
+  if (!container) return;
 
   try {
     const data = await api.getCategories();
-    const categories = data.categories;
 
-    categories.forEach(cat => {
+    data.categories.forEach(cat => {
       const div = document.createElement("div");
-      div.classList.add("category-card");
-      div.innerHTML = `<a href="recipes.html?category=${cat.strCategory}">${cat.strCategory}</a>`;
+      div.classList.add("category-box");
+
+      div.innerHTML = `
+        <p>${cat.strCategory}</p>
+      `;
+
+      div.addEventListener("click", ()=>{
+        window.location.href = `recipes.html?category=${cat.strCategory}`;
+      });
+
       container.appendChild(div);
     });
 
-  } catch (error) {
-    console.error("Error loading categories:", error);
+  } catch (err) {
+    console.error("Error loading categories:", err);
   }
 }
 
-loadCategories();
-
-// SEARCH (only if elements exist)
 const searchBtn = document.getElementById("searchButton");
 const searchInput = document.getElementById("searchInput");
 const resultsContainer = document.getElementById("search-results");
 const suggestionsBox = document.getElementById("suggestions");
 
-// CLICK SEARCH
 if (searchBtn && searchInput && resultsContainer) {
   searchBtn.addEventListener("click", async () => {
     const query = searchInput.value.trim();
+    if (!query) return resultsContainer.innerHTML = "<p>Please enter a search term.</p>";
 
-    if (!query) {
-      resultsContainer.innerHTML = "<p>Please enter a search term.</p>";
-      return;
-    }
+    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
+    const data = await res.json();
 
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
-    const data = await response.json();
-
-    resultsContainer.innerHTML = ""; 
-
-    if (!data.meals) {
-      resultsContainer.innerHTML = "<p>No recipes found.</p>";
-      return;
-    }
+    resultsContainer.innerHTML = "";
+    if (!data.meals) return resultsContainer.innerHTML = "<p>No recipes found.</p>";
 
     data.meals.forEach(meal => {
       const card = document.createElement("div");
       card.classList.add("recipe-card");
-
       card.innerHTML = `
         <a href="recipe-details.html?id=${meal.idMeal}">
-          <h3>${meal.strMeal}</h3>
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+            <h3>${meal.strMeal}</h3>
+            <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
         </a>
       `;
-
       resultsContainer.appendChild(card);
     });
   });
 }
 
-// ENTER KEY SEARCH
 if (searchInput && searchBtn) {
-  searchInput.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
-      searchBtn.click();
-    }
-  });
+  searchInput.addEventListener("keyup", e => { if (e.key === "Enter") searchBtn.click(); });
 }
-
-// CLEAR RESULTS ON DELETE
-let previousQuery = "";
 
 if (searchInput && resultsContainer) {
+  let previous = "";
   searchInput.addEventListener("input", () => {
-    const value = searchInput.value.trim();
-
-    if (value.length < previousQuery.length) {
-      resultsContainer.innerHTML = "";
-    }
-
-    previousQuery = value;
+    if (searchInput.value.trim().length < previous.length) resultsContainer.innerHTML = "";
+    previous = searchInput.value.trim();
   });
 }
 
-// AUTO-SUGGESTIONS
 if (searchInput && suggestionsBox) {
   searchInput.addEventListener("input", async () => {
     const query = searchInput.value.trim();
+    if (!query) return suggestionsBox.innerHTML = "";
 
-    if (query.length === 0) {
-      suggestionsBox.innerHTML = "";
-      return;
-    }
-
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
-    const data = await response.json();
+    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
+    const data = await res.json();
 
     suggestionsBox.innerHTML = "";
+    if (!data.meals) return suggestionsBox.innerHTML = "<p>No suggestions</p>";
 
-    if (!data.meals) {
-      suggestionsBox.innerHTML = "<p>No suggestions</p>";
-      return;
-    }
-
-    const list = data.meals.slice(0, 5);
-
-    list.forEach(meal => {
+    data.meals.slice(0,5).forEach(meal => {
       const item = document.createElement("div");
       item.classList.add("suggestion-item");
       item.textContent = meal.strMeal;
@@ -161,7 +121,7 @@ if (searchInput && suggestionsBox) {
       item.addEventListener("click", () => {
         searchInput.value = meal.strMeal;
         suggestionsBox.innerHTML = "";
-        if (searchBtn) searchBtn.click();
+        searchBtn.click();
       });
 
       suggestionsBox.appendChild(item);
@@ -169,11 +129,51 @@ if (searchInput && suggestionsBox) {
   });
 }
 
+async function getRandomMeal(){
+  const res = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+  const data = await res.json();
+  return data.meals[0];
+}
+
+const randomBtn = document.getElementById("random-meal-btn");
+const randomBox = document.getElementById("random-meal-display");
+const randomContent = document.getElementById("random-content");
+const closeRandomBtn = document.getElementById("close-random");
+
+if(randomBtn){
+  randomBtn.addEventListener("click", async ()=>{
+      const meal = await getRandomMeal();
+      randomBox.classList.remove("hidden");
+      randomContent.innerHTML = `
+          <div class="random-card">
+              <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+              <h3>${meal.strMeal}</h3>
+              <a href="recipe-details.html?id=${meal.idMeal}" class="view-btn">View Recipe</a>
+          </div>
+      `;
+  });
+}
+
+if(closeRandomBtn){
+  closeRandomBtn.addEventListener("click", ()=>{
+      randomBox.classList.add("hidden");
+  });
+}
+
 export function updateCartCount() {
   const cartCount = document.getElementById("cart-count");
   if (!cartCount) return;
-
   const shoppingList = JSON.parse(localStorage.getItem("shoppingList")) || [];
-  cartCount.textContent = shoppingList.length;
+const total = shoppingList.reduce((sum, item) => sum + item.qty, 0);
+cartCount.textContent = total;
 }
 updateCartCount();
+
+const menuToggle = document.getElementById("menu-toggle");
+const sideMenu = document.querySelector(".side-menu");
+
+if (menuToggle && sideMenu) {
+  menuToggle.addEventListener("click", () => {
+    sideMenu.classList.toggle("open");
+  });
+}

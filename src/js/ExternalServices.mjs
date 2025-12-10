@@ -30,4 +30,8 @@ export default class ExternalServices {
     );
     return await response.json();
   }
+  async searchMealsByName(name){
+    return await convertToJson(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
+  }
+
 }

@@ -1,28 +1,21 @@
-// favorites.js
-// Show favorite recipes with image + open details page + remove option
-
 import { updateCartCount } from "./main.js";
 
 const favContainer = document.getElementById("fav-list");
 
-// Load favorite objects: {name, id}
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-// Function to load image data using ID
 async function getMealThumb(id) {
     const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const data = await res.json();
-    return data.meals[0].strMealThumb; // just return image URL
+    return data.meals[0].strMealThumb; 
 }
 
-// Display favorites on screen
 async function showFavorites() {
     favContainer.innerHTML = "";
 
     for (let item of favorites) {
         const li = document.createElement("li");
 
-        // fetch image using ID
         const thumb = await getMealThumb(item.id);
 
         li.innerHTML = `
@@ -41,7 +34,6 @@ async function showFavorites() {
             </div>
         `;
 
-        // Remove favorite
         li.querySelector(".remove-btn").addEventListener("click", () => {
             favorites = favorites.filter(f => f.id !== item.id);
             localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -52,7 +44,6 @@ async function showFavorites() {
     }
 }
 
-// Clear all favorites
 document.getElementById("clear-fav").addEventListener("click", () => {
     favorites = [];
     localStorage.setItem("favorites", JSON.stringify(favorites));

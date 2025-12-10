@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout</title>
+<link rel="stylesheet" href="./src/css/styles.css">
+</head>
+
+<body>
+
+<header class="top-header">
+    <a href="index.html" class="logo-link">
+        <img src="./src/images/ImageLogo.png" alt="Logo" class="logo-img">
+    </a>
+    <div class="title-group">
+        <h1>Checkout</h1>
+        <p>Review your order before paying</p>
+    </div>
+</header>
+
+<main class="checkout-container">
+
+    <h2 class="checkout-title">Order Summary</h2>
+
+    <ul id="order-list" class="checkout-list"></ul>
+
+    <div id="checkout-total" class="checkout-total-box"></div>
+
+    <div class="checkout-btns">
+        <button class="back-cart-btn" onclick="window.location.href='shopping-list.html'">← Back to Cart</button>
+        <button id="confirm-btn" class="confirm-btn">Confirm Order</button>
+    </div>
+
+</main>
+
+<footer class="main-footer">
+    <p>Yolanda Lizano - Healthy Recipes © 2025 - Built for WDD330</p>
+
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="shopping-list.html">Shopping List</a>
+        <a href="favorites.html">Favorites</a>
+        <a href="checkout.html">Checkout</a>
+    </div>
+
+    <div class="footer-social">
+        <a href="https://www.facebook.com/" target="_blank"><img src="./src/images/facebook.png" alt="Facebook"></a>
+        <a href="https://www.instagram.com/" target="_blank"><img src="./src/images/insta.png" alt="Instagram"></a>
+        <a href="https://www.youtube.com/" target="_blank"><img src="./src/images/youtube.jpg" alt="YouTube"></a>
+        <a href="https://www.tiktok.com/explore" target="_blank"><img src="./src/images/tiktok.jpg" alt="TikTok"></a>
+    </div>
+</footer>
+
+<script src="./src/js/checkout.js"></script>
+</body>
+</html>
